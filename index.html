@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sayanggg ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================
+           RESET & CORE STYLES
+        ========================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe5ec 0%, #f0e6ff 50%, #e8dbff 100%);
+            color: #4a3e4d;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(255, 182, 193, 0.5) 0%, transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(218, 182, 255, 0.5) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Click Particles */
+        .click-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999999;
+            font-size: 20px;
+            animation: floatUpParticle 0.8s ease-out forwards;
+        }
+
+        @keyframes floatUpParticle {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.2); opacity: 0; }
+        }
+
+        .floating {
+            position: fixed;
+            top: -50px;
+            pointer-events: none;
+            z-index: 999;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-50px) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(105vh) translateX(60px) rotate(360deg); opacity: 0; }
+        }
+
+        /* =========================
+           MUSIC PLAYER CONTROL
+        ========================= */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 8px 16px rgba(165, 142, 186, 0.15);
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .music-control.playing {
+            animation: rotateVinyl 4s linear infinite;
+            background: #ff758f;
+            color: white;
+        }
+
+        @keyframes rotateVinyl {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* =========================
+           FIXED LOADING SCREEN
+        ========================= */
+        #loading {
+            position: fixed;
+            inset: 0;
+            background: #ffe5ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 999999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader {
+            font-size: 70px;
+            animation: heartPulse 1.4s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255,105,180,0.3)); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 15px rgba(255,105,180,0.6)); }
+        }
+
+        .loading-text {
+            margin-top: 25px;
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #ff758f;
+            font-weight: 700;
+        }
+
+        .bypass-btn {
+            margin-top: 20px;
+            background: transparent;
+            border: 1px solid rgba(255, 117, 143, 0.4);
+            color: #ff758f;
+            padding: 6px 15px;
+            font-size: 11px;
+            box-shadow: none;
+            cursor: pointer;
+        }
+
+        /* =========================
+           LAYOUT & CARDS
+        ========================= */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 40px 20px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .active {
+            display: flex;
+            animation: scaleUpFade 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes scaleUpFade {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .card {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 32px;
+            padding: 45px 30px;
+            box-shadow: 0 25px 50px rgba(165, 142, 186, 0.18);
+        }
+
+        /* =========================
+           TYPOGRAPHY
+        ========================= */
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff5c8a;
+            margin-bottom: 18px;
+            letter-spacing: -0.5px;
+        }
+
+        .serif-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 600;
+            color: #6a4c70;
+        }
+
+        .subtitle {
+            line-height: 1.8;
+            font-size: 15px;
+            color: #5c4d61;
+        }
+
+        /* =========================
+           BUTTONS EFFECT
+        ========================= */
+        button {
+            border: none;
+            padding: 15px 40px;
+            border-radius: 999px;
+            background: linear-gradient(45deg, #ff758f, #ff9eb5);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 35px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 24px rgba(255, 117, 143, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 18px 30px rgba(255, 117, 143, 0.45);
+        }
+
+        /* =========================
+           SWEET 16 DISPLAY
+        ========================= */
+        .sweet {
+            font-size: 110px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(to bottom, #ff758f, #ffb3c6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 5px 0;
+            filter: drop-shadow(0 5px 12px rgba(255,117,143,0.2));
+            animation: floatAnim 3s ease-in-out infinite;
+        }
+
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* =========================
+           POLAROID GALLERY
+        ========================= */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 25px;
+        }
+
+        .photo {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            border-radius: 8px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            position: relative;
+        }
+
+        .photo:nth-child(4n+1) { transform: rotate(-4deg); }
+        .photo:nth-child(4n+2) { transform: rotate(3deg); }
+        .photo:nth-child(4n+3) { transform: rotate(-2deg); }
+        .photo:nth-child(4n+4) { transform: rotate(4deg); }
+
+        .photo:hover {
+            transform: translateY(-12px) rotate(0deg) scale(1.06);
+            box-shadow: 0 25px 35px rgba(0,0,0,0.12);
+            z-index: 10;
+        }
+
+        .photo img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 4px;
+            background-color: #f7f7f7;
+        }
+
+        .photo::after {
+            content: "📸 ❤️";
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        /* =========================
+           LETTER CONTAINER
+        ========================= */
+        .letter-box {
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+            padding-right: 12px;
+            margin-top: 20px;
+        }
+
+        .letter-box::-webkit-scrollbar { width: 5px; }
+        .letter-box::-webkit-scrollbar-thumb {
+            background: rgba(255, 117, 143, 0.4);
+            border-radius: 10px;
+        }
+
+        .letter-box p {
+            font-size: 15px;
+            line-height: 1.9;
+            color: #5c4d61;
+            margin-bottom: 18px;
+        }
+
+        /* =========================
+           INTERACTIVE MODAL
+        ========================= */
+        #imageModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(30, 24, 33, 0.85);
+            backdrop-filter: blur(12px);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 999999;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 14px 14px 45px 14px;
+            border-radius: 12px;
+            max-width: 90%;
+            max-height: 80%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            animation: zoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+
+        #modalImg {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 6px;
+            object-fit: contain;
+        }
+
+        #modalText {
+            margin-top: 15px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 18px;
+            color: #ff5c8a;
+            font-weight: 600;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* =========================
+           FINAL EFFECTS
+        ========================= */
+        #finalOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 232, 237, 0.96);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+            z-index: 99990;
+            display: none;
+        }
+
+        #countdown {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            font-weight: 700;
+            color: #ff758f;
+            z-index: 999999;
+            font-family: 'Playfair Display', serif;
+        }
+
+        #loveText {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.6);
+            width: 90%;
+            text-align: center;
+            opacity: 0;
+            z-index: 999999;
+            pointer-events: none;
+            transition: all 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .showLove {
+            opacity: 1 !important;
+            transform: translate(-50%, -50%) scale(1) !important;
+        }
+
+        @media(max-width: 480px) {
+            .card { padding: 35px 20px; }
+            h1 { font-size: 24px; }
+            .sweet { font-size: 85px; }
+            .photo img { height: 115px; }
+        }
+        audio { display: none; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Interactive Music Player Button -->
+    <div class="music-control" id="musicBtn" onclick="toggleMusic()">🎵</div>
+
+    <!-- Loading Screen with Bypass Mechanism -->
+    <div id="loading">
+        <div class="loader">🌸</div>
+        <div class="loading-text">Menyiapkan Kejutan...</div>
+        <button class="bypass-btn" onclick="removeLoading()">Klik jika macet ⚡</button>
+    </div>
+
+    <audio id="music" loop>
+        <source src="lagu.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- PAGE 1 -->
+    <div class="page active" id="page1">
+        <div class="card">
+            <h1 class="serif-text">Happy Birthday, Sayang! ❤️</h1>
+            <p class="subtitle">Aku punya kejutan kecil yang dibuat khusus untuk hari spesialmu. Semoga kamu suka ya!</p>
+            <button onclick="startWebsite()">Buka Hadiah 🎁</button>
+        </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page" id="page2">
+        <div class="card">
+            <h1 class="serif-text">Untuk Semesta Kecilku ✨</h1>
+            <div id="typing" style="font-size: 15px; line-height: 1.8; color: #5c4d61; min-height: 180px; text-align: left;"></div>
+            <button onclick="nextPage(3)">Lanjut 🥰</button>
+        </div>
+    </div>
+
+    <!-- PAGE 3 -->
+    <div class="page" id="page3">
+        <div class="card">
+            <h1 class="serif-text">Galeri Kenangan 📸</h1>
+            <p class="subtitle">Klik pada foto untuk melihat detail memori manis kita.</p>
+            
+            <div class="gallery">
+                <div class="photo" onclick="openImage('photobooth1.jpg', 'Senyum kesukaan aku sepanjang masa 🥰')"><img src="photobooth1.jpg"></div>
+                <div class="photo" onclick="openImage('photobooth2.jpg', 'Momen random yang selalu bikin kangen 💖')"><img src="photobooth2.jpg"></div>
+                <div class="photo" onclick="openImage('photobooth3.jpg', 'Capek tapi seneng banget hari ini ✨')"><img src="photobooth3.jpg"></div>
+                <div class="photo" onclick="openImage('photobooth4.jpg', 'Salah satu foto tercantik kamu (selalu cantik sih) 🫶')"><img src="photobooth4.jpg"></div>
+                <div class="photo" onclick="openImage('photobooth5.jpg', 'Dunia berasa milik berdua ya waktu ini 🧸')"><img src="photobooth5.jpg"></div>
+                <div class="photo" onclick="openImage('photobooth6.jpg', 'Ketawa paling lepas bareng kamu 😂❤️')"><img src="photobooth6.jpg"></div>
+                <div class="photo" onclick="openImage('meja.jpg', 'Duduk sebelahan, ga mau jauh-jauh! ☁️')"><img src="meja.jpg"></div>
+                <div class="photo" onclick="openImage('pramuka.jpg', 'Pake seragam pun aura cantiknya tetep ga ilang 😍')"><img src="pramuka.jpg"></div>
+            </div>
+
+            <button onclick="nextPage(4)">Sweet Sixteen 💖</button>
+        </div>
+    </div>
+
+    <!-- PAGE 4 -->
+    <div class="page" id="page4">
+        <div class="card">
+            <h1 class="serif-text">Sweet Sixteen</h1>
+            <div class="sweet">16</div>
+            <p class="subtitle">
+                Hari ini bukan sekadar bertambah angka. Ini tentang semua tawa, cerita, air mata, dan proses hebat yang udah kamu lewatin sampai hari ini. Aku bangga banget sama kamu.
+            </p>
+            <button onclick="nextPage(5)">Buka Surat 💌</button>
+        </div>
+    </div>
+
+    <!-- PAGE 5 -->
+    <div class="page" id="page5">
+        <div class="card">
+            <h1 class="serif-text">Surat Untukmu... ❤️</h1>
+            <div class="letter-box">
+                <p>Selamat ulang tahun yang ke-16, sayanggg ❤️</p>
+                <p>Hari ini bumi berputar seperti biasa, tapi buat aku hari ini luar biasa. Seseorang yang sangat amat berharga bagi aku sedang merayakan hari lahirnya.</p>
+                <p>Terima kasih ya sudah hadir di dunia ini, dan terima kasih sudah mengizinkan aku jadi bagian dari cerita kamu. Makasih buat segala senyuman manis dan perhatian-perhatian kecil yang selalu sukses mencerahkan hari-hari aku.</p>
+                <p>Aku tahu aku jauh dari kata sempurna. Banyak kurangnya. Tapi satu hal yang perlu kamu tahu: aku bersyukur luar biasa bisa kenal dan dekat sama kamu.</p>
+                <p>Di umur yang baru ini, aku doakan kamu selalu sehat, selalu bahagia, dan selalu dikelilingi kebaikan. Semoga semua mimpi tersembunyimu satu per satu jadi kenyataan ya.</p>
+                <p>Happy Sweet Sixteen, cantiknya aku. <i>I love you more than words can say.</i> ❤️</p>
+            </div>
+            <button onclick="nextPage(6)">Satu Hal Lagi... ✨</button>
+        </div>
+    </div>
+
+    <!-- PAGE 6 -->
+    <div class="page" id="page6">
+        <div class="card">
+            <h1 class="serif-text">Terakhir... 🫶</h1>
+            <p class="subtitle">Ada satu kejutan penutup khusus buat kamu.</p>
+            <button onclick="startLoveExplosion()">Klik Di Sini ❤️</button>
+        </div>
+    </div>
+
+    <!-- POPUP MODAL DETAIL FOTO -->
+    <div id="imageModal" onclick="closeImage()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <img id="modalImg" src="">
+            <div id="modalText"></div>
+        </div>
+    </div>
+
+    <div id="finalOverlay"></div>
+    <div id="countdown">3</div>
+    <div id="loveText">
+        <div class="serif-text" style="font-size: 26px; color: #ff758f; margin-bottom: 12px;">I Love You, Sayang!</div>
+        <div style="letter-spacing: 3px; font-size: 34px; font-weight: 700; color: #ff5c8a;">HAPPY SWEET 16</div>
+        <div style="letter-spacing: 3px; font-size: 34px; font-weight: 700; color: #ff5c8a;">✨</div>
+    </div>
+
+    <script>
+        // FORCED AUTO REMOVE LOADING SCREEN (Sistem Penghilang Macet Bawaan)
+        function removeLoading() {
+            const loader = document.getElementById("loading");
+            if(loader) {
+                loader.style.opacity = "0";
+                loader.style.visibility = "hidden";
+                setTimeout(() => loader.remove(), 500);
+            }
+        }
+        // Otomatis dipaksa hilang setelah 1.5 detik tanpa nunggu sistem browser
+        setTimeout(removeLoading, 1500);
+
+        // Custom Click Burst Heart Particles
+        document.addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON' || e.target.closest('.photo') || e.target.closest('.music-control')) return;
+            
+            for(let i=0; i<3; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'click-heart';
+                heart.innerHTML = ['❤️','💖','✨','🌸'][Math.floor(Math.random() * 4)];
+                heart.style.left = e.clientX + 'px';
+                heart.style.top = e.clientY + 'px';
+                
+                const x = (Math.random() - 0.5) * 100 + 'px';
+                const y = (Math.random() - 0.8) * 120 + 'px';
+                heart.style.setProperty('--x', x);
+                heart.style.setProperty('--y', y);
+                
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 800);
+            }
+        });
+
+        // Interactive Music Player Logic
+        const music = document.getElementById("music");
+        const musicBtn = document.getElementById("musicBtn");
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play().catch(() => {});
+                musicBtn.classList.add("playing");
+                musicBtn.innerHTML = "🎵";
+            } else {
+                music.pause();
+                musicBtn.classList.remove("playing");
+                musicBtn.innerHTML = "🔇";
+            }
+        }
+
+        // Typing Effect Settings
+        const introText = "Halo sayanggg ❤️ Selamat ulang tahun yang ke-16. Website kecil ini sengaja aku bikin khusus buat kamu di hari spesialmu ini. Mungkin sederhana, tapi di sini ada banyak doa dan rasa sayang aku yang dirangkai jadi satu. Diintip sampai halaman terakhir yaaa... ✨";
+        let typingIndex = 0;
+        let isTypingStarted = false;
+
+        function typeWriter() {
+            if (typingIndex < introText.length) {
+                document.getElementById("typing").innerHTML += introText.charAt(typingIndex);
+                typingIndex++;
+                setTimeout(typeWriter, 40);
+            }
+        }
+
+        function startWebsite() {
+            music.play().catch(() => {});
+            musicBtn.classList.add("playing");
+            document.getElementById("page1").classList.remove("active");
+            document.getElementById("page2").classList.add("active");
+            if (!isTypingStarted) {
+                isTypingStarted = true;
+                setTimeout(typeWriter, 400);
+            }
+        }
+
+        function nextPage(page) {
+            document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+            document.getElementById("page" + page).classList.add("active");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        // Polaroid Modal Logic
+        function openImage(src, text) {
+            document.getElementById("imageModal").style.display = "flex";
+            document.getElementById("modalImg").src = src;
+            document.getElementById("modalText").innerHTML = text;
+        }
+
+        function closeImage() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        // Background Floating Elements
+        function createFloating() {
+            const item = document.createElement("div");
+            item.className = "floating";
+            const icons = ["❤️", "🌸", "✨", "💖", "☁️", "🧸"];
+            item.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+            item.style.left = Math.random() * 100 + "vw";
+            item.style.fontSize = (14 + Math.random() * 16) + "px";
+            item.style.animation = `fall ${5 + Math.random() * 4}s linear forwards`;
+            document.body.appendChild(item);
+            setTimeout(() => item.remove(), 8000);
+        }
+        setInterval(createFloating, 350);
+
+        // Confetti Booster
+        function startConfetti() {
+            for (let i = 0; i < 120; i++) {
+                setTimeout(() => {
+                    const conf = document.createElement("div");
+                    const icons = ["🎉", "✨", "💖", "🌸", "🎂", "💝"];
+                    conf.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                    conf.style.position = "fixed";
+                    conf.style.left = "50%";
+                    conf.style.top = "50%";
+                    conf.style.fontSize = (16 + Math.random() * 24) + "px";
+                    conf.style.zIndex = "999999";
+                    conf.style.pointerEvents = "none";
+                    document.body.appendChild(conf);
+
+                    const x = (Math.random() - 0.5) * window.innerWidth * 1.6;
+                    const y = (Math.random() - 0.6) * window.innerHeight * 1.6;
+
+                    conf.animate([
+                        { transform: "translate(-50%, -50%) scale(0.3)", opacity: 1 },
+                        { transform: `translate(${x}px, ${y}px) scale(1.3)`, opacity: 0 }
+                    ], { duration: 2200, easing: "cubic-bezier(0.1, 0.8, 0.3, 1)" });
+
+                    setTimeout(() => conf.remove(), 2200);
+                }, i * 8);
+            }
+        }
+
+        // Final Cinematic Countdown
+        let currentCount = 3;
+        function startLoveExplosion() {
+            const overlay = document.getElementById("finalOverlay");
+            const cd = document.getElementById("countdown");
+            
+            overlay.style.display = "block";
+            setTimeout(() => overlay.style.opacity = "1", 10);
+            
+            cd.style.display = "block";
+            cd.innerHTML = currentCount;
+
+            const interval = setInterval(() => {
+                currentCount--;
+                if(currentCount > 0) {
+                    cd.innerHTML = currentCount;
+                } else {
+                    clearInterval(interval);
+                    cd.style.display = "none";
+                    explodeLove();
+                }
+            }, 1000);
+        }
+
+        function explodeLove() {
+            startConfetti();
+            const text = document.getElementById("loveText");
+            text.classList.add("showLove");
+            
+            setInterval(() => {
+                if(document.getElementById("loveText").classList.contains("showLove")) {
+                    createExplosionHeart();
+                }
+            }, 300);
+        }
+
+        function createExplosionHeart() {
+            const h = document.createElement("div");
+            h.style.position = "fixed";
+            h.style.left = Math.random() * 100 + "vw";
+            h.style.top = Math.random() * 100 + "vh";
+            h.innerHTML = "💖";
+            h.style.zIndex = "999999";
+            h.style.fontSize = "20px";
+            document.body.appendChild(h);
+            h.animate([
+                { transform: "scale(0)", opacity: 1 },
+                { transform: "scale(1.5) translateY(-30px)", opacity: 0 }
+            ], { duration: 1000 });
+            setTimeout(() => h.remove(), 1000);
+        }
+    </script>
+</body>
+</html>
